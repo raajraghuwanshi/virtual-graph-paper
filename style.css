@@ -1,0 +1,87 @@
+/* style.css
+ * ---------------------------------------------------------------------
+ * Hand-written CSS for the parts Tailwind utilities don't cover:
+ * the layered/infinite canvas, tool button states, cursor-per-tool,
+ * the keyboard-shortcut <kbd> chips, and print output.
+ */
+
+#canvasWrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+#gridLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#drawLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    cursor: crosshair;
+    touch-action: none; /* let JS fully own panning/drawing gestures on touch */
+}
+
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.tool-btn:hover {
+    background-color: #f1f5f9;
+}
+
+.tool-active {
+    background-color: #eef2ff;
+    border-color: #6366f1;
+}
+
+/* Cursor per active tool / interaction, toggled on #drawLayer via JS */
+.cursor-select { cursor: default; }
+.cursor-crosshair { cursor: crosshair; }
+.cursor-text { cursor: text; }
+.cursor-eraser { cursor: cell; }
+.cursor-pan { cursor: grab; }
+.cursor-panning { cursor: grabbing; }
+
+.kbd {
+    display: inline-block;
+    min-width: 1.4rem;
+    padding: 0 0.3rem;
+    text-align: center;
+    font-size: 0.7rem;
+    font-family: ui-monospace, monospace;
+    border: 1px solid #cbd5e1;
+    border-bottom-width: 2px;
+    border-radius: 0.25rem;
+    background: #f8fafc;
+    color: #475569;
+}
+
+/* Printing: hide all chrome, show only the drawing canvas at full page size */
+@media print {
+    header, aside, #textInput {
+        display: none !important;
+    }
+    body, main, #canvasWrap {
+        position: static !important;
+        overflow: visible !important;
+        background: #fff !important;
+    }
+    #gridLayer, #drawLayer {
+        position: static !important;
+    }
+}
