@@ -1,10 +1,13 @@
 /* style.css
- * ---------------------------------------------------------------------
- * Hand-written CSS for the parts Tailwind utilities don't cover:
- * the layered/infinite canvas, tool button states, cursor-per-tool,
- * the keyboard-shortcut <kbd> chips, and print output.
+ * -------------------------------------------------------------------------
+ * Hand-crafted CSS for the Virtual Graph Paper clone.
+ * Covers: layered canvas, tool button states, cursor-per-tool,
+ * coordinate bar, ad slot, sidebar layout, kbd chips, and print.
  */
 
+/* =========================================================================
+   CANVAS LAYERS
+   ========================================================================= */
 #canvasWrap {
     position: absolute;
     inset: 0;
@@ -13,67 +16,250 @@
 
 #gridLayer {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     z-index: 1;
 }
 
 #drawLayer {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     z-index: 2;
     cursor: crosshair;
-    touch-action: none; /* let JS fully own panning/drawing gestures on touch */
+    touch-action: none; /* let JS own all pointer gestures on touch screens */
 }
 
+/* =========================================================================
+   TOOL BUTTONS
+   ========================================================================= */
 .tool-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.15rem;
-    height: 2.15rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.4rem;
+    font-size: 0.95rem;
     background: transparent;
     border: 1px solid transparent;
-    transition: background-color 120ms ease, border-color 120ms ease;
+    cursor: pointer;
+    transition: background-color 100ms ease, border-color 100ms ease;
+    flex-shrink: 0;
 }
 
 .tool-btn:hover {
     background-color: #f1f5f9;
+    border-color: #e2e8f0;
 }
 
 .tool-active {
     background-color: #eef2ff;
-    border-color: #6366f1;
+    border-color: #6366f1 !important;
 }
 
-/* Cursor per active tool / interaction, toggled on #drawLayer via JS */
-.cursor-select { cursor: default; }
-.cursor-crosshair { cursor: crosshair; }
-.cursor-text { cursor: text; }
-.cursor-eraser { cursor: cell; }
-.cursor-pan { cursor: grab; }
-.cursor-panning { cursor: grabbing; }
+/* Smaller glyph for shape buttons that use unicode symbols */
+.tool-symbol {
+    font-size: 0.8rem;
+}
 
+/* Thin vertical separator between toolbar groups */
+.tool-sep {
+    display: inline-block;
+    width: 1px;
+    height: 1.25rem;
+    background: #e2e8f0;
+    margin: 0 0.2rem;
+    flex-shrink: 0;
+}
+
+/* =========================================================================
+   CURSOR PER ACTIVE TOOL  (toggled on #drawLayer via JS)
+   ========================================================================= */
+.cursor-select    { cursor: default; }
+.cursor-crosshair { cursor: crosshair; }
+.cursor-text      { cursor: text; }
+.cursor-eraser    { cursor: cell; }
+.cursor-pan       { cursor: grab; }
+.cursor-panning   { cursor: grabbing; }
+
+/* =========================================================================
+   SIDEBAR
+   ========================================================================= */
+.sidebar {
+    width: 13.5rem;        /* ~216px */
+    flex-shrink: 0;
+}
+
+.sidebar-heading {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-label {
+    display: block;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-select {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.3rem;
+    padding: 0.25rem 0.375rem;
+    font-size: 0.75rem;
+    background: #fff;
+    color: #334155;
+}
+
+.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #475569;
+}
+
+.sidebar-num-input {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.75rem;
+    color: #334155;
+    background: #fff;
+}
+
+.toggle-check {
+    cursor: pointer;
+    accent-color: #6366f1;
+}
+
+/* =========================================================================
+   KEYBOARD SHORTCUT CHIPS
+   ========================================================================= */
 .kbd {
     display: inline-block;
-    min-width: 1.4rem;
-    padding: 0 0.3rem;
+    min-width: 1.3rem;
+    padding: 0.05rem 0.3rem;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-family: ui-monospace, monospace;
     border: 1px solid #cbd5e1;
     border-bottom-width: 2px;
     border-radius: 0.25rem;
     background: #f8fafc;
-    color: #475569;
+    color: #64748b;
+    line-height: 1.5;
 }
 
-/* Printing: hide all chrome, show only the drawing canvas at full page size */
+/* =========================================================================
+   COORDINATE / STATUS BAR
+   ========================================================================= */
+.coord-bar {
+    display: flex;
+    align-items: center;
+    height: 1.75rem;
+    padding: 0 0.75rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.7rem;
+    color: #475569;
+    font-family: ui-monospace, monospace;
+    gap: 0;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.coord-bar b {
+    color: #6366f1;
+    font-weight: 600;
+    min-width: 2.5rem;
+    display: inline-block;
+}
+
+/* =========================================================================
+   ADVERTISEMENT SLOT
+   ========================================================================= */
+.ad-slot {
+    background: #fafafa;
+}
+
+/*
+ * .ad-placeholder  — shown when no real ad code is inserted.
+ * Replace the entire <div class="ad-placeholder"> block with your
+ * ad network's code (e.g. Google AdSense <ins> tag) to go live.
+ */
+.ad-placeholder {
+    width: 100%;
+    min-height: 9rem;           /* ~144px — fits nicely at sidebar width */
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 200ms ease, border-color 200ms ease;
+}
+
+.ad-placeholder:hover {
+    background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+    border-color: #a5b4fc;
+}
+
+.ad-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.ad-icon {
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+.ad-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6366f1;
+    letter-spacing: 0.02em;
+}
+
+.ad-dims {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    font-family: ui-monospace, monospace;
+}
+
+.ad-cta {
+    font-size: 0.6rem;
+    color: #a5b4fc;
+    margin-top: 0.15rem;
+}
+
+/* =========================================================================
+   TEXT INPUT (in-canvas text editor overlay)
+   ========================================================================= */
+#textInput {
+    min-width: 4rem;
+    border: 1px solid #6366f1;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 2px 4px;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* =========================================================================
+   PRINT  —  show only the canvas, hide all chrome
+   ========================================================================= */
 @media print {
-    header, aside, #textInput {
+    header, aside, #textInput, #statusBar {
         display: none !important;
     }
     body, main, #canvasWrap {
