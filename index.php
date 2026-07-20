@@ -127,6 +127,7 @@ $defaults = [
 
         <!-- Push export buttons to the right -->
         <div class="ml-auto flex items-center gap-2 pl-3 shrink-0">
+            <button id="aboutBtn"     class="hdr-btn hdr-btn-ghost" title="About & Links">About</button>
             <button id="newSketchBtn" class="hdr-btn hdr-btn-ghost" title="New sketch">New</button>
             <button id="printBtn"     class="hdr-btn hdr-btn-ghost" title="Print (Ctrl+P)">Print</button>
             <button id="exportPngBtn" class="hdr-btn hdr-btn-primary">Export PNG</button>
@@ -323,6 +324,18 @@ $defaults = [
                     </p>
                 </div>
 
+                <hr class="border-slate-200">
+
+                <div>
+                    <h2 class="sidebar-heading">Pages & Info</h2>
+                    <ul class="space-y-1.5 text-slate-600 font-medium">
+                        <li><a href="news.php" class="hover:text-indigo-600 transition-colors flex items-center gap-1.5"><span>📰</span> What's New</a></li>
+                        <li><a href="contact.php" class="hover:text-indigo-600 transition-colors flex items-center gap-1.5"><span>💬</span> Contact & Support</a></li>
+                        <li><a href="privacy.php" class="hover:text-indigo-600 transition-colors flex items-center gap-1.5"><span>🔒</span> Privacy Policy</a></li>
+                        <li><a href="attribution.php" class="hover:text-indigo-600 transition-colors flex items-center gap-1.5"><span>❤️</span> Attribution</a></li>
+                    </ul>
+                </div>
+
             </div>
         </aside><!-- /aside -->
 
@@ -382,8 +395,75 @@ $defaults = [
 
 </div><!-- /#appRoot -->
 
+<!-- =====================================================================
+     ABOUT & INFO MODAL
+====================================================================== -->
+<div id="aboutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-5 relative">
+        <button id="closeAboutModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+            ✕
+        </button>
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-xl">📐</div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">Virtual Graph Paper</h3>
+                <p class="text-xs text-slate-500">Free infinite online grid editor</p>
+            </div>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+            Virtual Graph Paper is a web application for creating drawings and illustrations on a virtual grid right in your browser.
+        </p>
+        <div class="space-y-2 pt-2 border-t border-slate-100 text-sm">
+            <a href="news.php" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 font-medium transition-colors">
+                <span class="flex items-center gap-2"><span>📰</span> What's new</span>
+                <span class="text-slate-400 text-xs">→</span>
+            </a>
+            <a href="contact.php" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 font-medium transition-colors">
+                <span class="flex items-center gap-2"><span>💬</span> Ask a question / Report issue</span>
+                <span class="text-slate-400 text-xs">→</span>
+            </a>
+            <a href="privacy.php" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 font-medium transition-colors">
+                <span class="flex items-center gap-2"><span>🔒</span> Privacy policy</span>
+                <span class="text-slate-400 text-xs">→</span>
+            </a>
+            <a href="attribution.php" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 font-medium transition-colors">
+                <span class="flex items-center gap-2"><span>❤️</span> Open-source attribution</span>
+                <span class="text-slate-400 text-xs">→</span>
+            </a>
+        </div>
+        <div class="pt-2 text-center">
+            <button id="startDrawingBtn" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium text-sm transition-colors shadow-sm">
+                Start drawing
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     window.APP_CONFIG = <?= json_encode($defaults, JSON_UNESCAPED_SLASHES) ?>;
+    
+    // About Modal listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('aboutModal');
+        const openBtn = document.getElementById('aboutBtn');
+        const closeBtn = document.getElementById('closeAboutModalBtn');
+        const startBtn = document.getElementById('startDrawingBtn');
+
+        if (openBtn && modal) {
+            openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        }
+        if (closeBtn && modal) {
+            closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        }
+        if (startBtn && modal) {
+            startBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        }
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.add('hidden');
+            });
+        }
+    });
 </script>
 <script src="app.js"></script>
 </body>
